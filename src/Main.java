@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
         // step 1: create a file object
-        File f = new File("src/input_file");
+        File f = new File("src/txt");
 
         String fileData = "";
         try {
