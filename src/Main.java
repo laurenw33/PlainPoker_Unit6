@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.Arrays;
 
@@ -8,6 +9,7 @@ public class Main {
 
         // step 1: create a file object
         File f = new File("src/txt");
+
 
         String fileData = "";
         try {
@@ -20,17 +22,48 @@ public class Main {
             // a String array where every item in the array is a line from the file
             String[] fileArray = fileData.split("\n");
 
-            for (String line : fileArray) {
-                // split by space, now we have a list of String numbers
-                String[] stringNumbers = line.split(" ");
+            String numbers;
+            for (int i = 0; i < fileArray.length; i++) {
+                String stringNumbers = fileArray[i];
+                String[] x = stringNumbers.split("\\|");
+                String[] y = x[0].split(",");
+                System.out.println(Arrays.toString(y));
 
-                // create an array of integers
-                int[] numbers = new int[stringNumbers.length];
-
-                // convert string numbers into integers
-                for (int i = 0; i < numbers.length; i++) {
-                    numbers[i] = Integer.parseInt(stringNumbers[i]);
+                numbers = "";
+                for (int p = 0; p < y.length; p++){
+                    String list = y[p];
+                    if (list.equals("1")){
+                        numbers += "1" + " ";
+                    }
+                    else if (list.equals("2")){
+                        numbers += "2" + " ";
+                    }
+                    else if (list.equals("3")){
+                        numbers += "3" + " ";
+                    }
+                    else if (list.equals("4")){
+                        numbers += "4" + " ";
+                    }
+                    else if (list.equals("5")){
+                        numbers += "5" + " ";
+                    }
+                    else if (list.equals("6")){
+                        numbers += "6" + " ";
+                    }
+                    else if (list.equals("7")){
+                        numbers += "7" + " ";
+                    }
+                    else if (list.equals("8")){
+                        numbers += "8" + " ";
+                    }
+                    else if (list.equals("9")){
+                        numbers += "9" + " ";
+                    }
+                    else if (list.equals("10")){
+                        numbers += "10" + " ";
+                    }
                 }
+                System.out.println(numbers);
             }
         }
         catch (FileNotFoundException fe) {
@@ -39,4 +72,7 @@ public class Main {
         }
 
     }
+
+
 }
+
