@@ -19,10 +19,10 @@ public class Main {
                 fileData += currentLine + "\n";
             }
 
-            // a String array where every item in the array is a line from the file
             String[] fileArray = fileData.split("\n");
 
             String numbers;
+            String names;
             for (int i = 0; i < fileArray.length; i++) {
                 String stringNumbers = fileArray[i];
                 String[] x = stringNumbers.split("\\|");
@@ -30,6 +30,7 @@ public class Main {
                 System.out.println(Arrays.toString(y));
 
                 numbers = "";
+                names = "";
                 for (int p = 0; p < y.length; p++){
                     String list = y[p];
                     if (list.equals("1")){
@@ -63,7 +64,26 @@ public class Main {
                         numbers += "10" + " ";
                     }
                 }
-                System.out.println(numbers);
+                for (int p = 0; p < y.length; p++) {
+                    String list = y[p];
+                    if (list.equalsIgnoreCase("ace")){
+                        names += "Ace ";
+                    }
+                    else if (list.equalsIgnoreCase("king")){
+                        names += "King ";
+                    }
+                    else if (list.equalsIgnoreCase("queen")){
+                        names += "Queen ";
+                    }
+                    else if (list.equalsIgnoreCase("jack")){
+                        names += "Jack ";
+                    }
+                }
+                String[] num = numbers.split(" ");
+                String[] name = names.split(" ");
+
+                System.out.println(Arrays.toString(num));
+                System.out.println(Arrays.toString(name));
             }
         }
         catch (FileNotFoundException fe) {
@@ -72,7 +92,6 @@ public class Main {
         }
 
     }
-
 
 }
 
