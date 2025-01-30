@@ -15,12 +15,16 @@ public class PlainPoker {
 
     public PlainPoker(String[] num, String[] s, String[] initial) {
         combined = initial;
-        int len = num.length;
-        cardNum = new int[len];
-        for (int i = 0; i < num.length - 1; i++) {
-            cardNum[i] = Integer.parseInt(num[i]);
-        }
         cardString = s;
+
+        cardNum = new int[num.length];
+        for (int i = 0; i < num.length; i++) {
+            try {
+                int number = Integer.parseInt(num[i]);
+                cardNum[i] = number;
+            }
+            catch (Exception e) {}
+        }
 
     }
 
@@ -87,25 +91,34 @@ public class PlainPoker {
         return line;
     }
 
-    private int getCardValue(String card) {
-        if (card.equalsIgnoreCase("ACE")) {
-            return 14;
+    public int getCardValue() {
+        int total = 0;
+
+        for (String card : cardString) {
+            if (card.equalsIgnoreCase("ACE")) {
+                total += 14;
+            }
+
+            if (card.equalsIgnoreCase("KING")) {
+                total += 13;
+            }
+            if (card.equalsIgnoreCase("QUEEN")) {
+                total += 12;
+            }
+            if (card.equalsIgnoreCase("JACK")) {
+                total += 11;
+            }
         }
-        if (card.equalsIgnoreCase("KING")) {
-            return 13;
+
+        for (int i : cardNum) {
+            total += i;
         }
-        if (card.equalsIgnoreCase("QUEEN")) {
-            return 12;
-        }
-        if (card.equalsIgnoreCase("JACK")) {
-            return 11;
-        }
-        try {
-            return Integer.parseInt(card);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
+        return total;
     }
 
+    public int[] getCardNum() {
+        return cardNum;
     }
+}
+
 

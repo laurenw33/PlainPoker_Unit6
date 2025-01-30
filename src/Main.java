@@ -30,7 +30,6 @@ public class Main {
                 String[] x = stringNumbers.split("\\|");
                 String[] y = x[0].split(",");
                 combined = y;
-                System.out.println(Arrays.toString(y));
 
                 numbers = "";
                 names = "";
@@ -74,11 +73,12 @@ public class Main {
                 String[] name = names.split(" ");
 
                 poker = new PlainPoker(num, name, combined);
-                System.out.println(Arrays.toString(poker.determineHandType()));
+                poker.determineHandType();
                 poker.handType(poker.determineHandType());
-                System.out.println(poker.toString());
+                System.out.println(poker.getCardValue());
+                System.out.println(Arrays.toString(poker.getCardNum()));
             }
-
+            System.out.println(poker.toString());
         }
         catch (FileNotFoundException fe) {
             System.out.println("File was not found");
