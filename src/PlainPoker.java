@@ -11,8 +11,9 @@ public class PlainPoker {
     private static int twoPair = 0;
     private static int onePair = 0;
     private static int highCard = 0;
+    String type;
 
-    public PlainPoker(String[] num, String[] s, String[] initial){
+    public PlainPoker(String[] num, String[] s, String[] initial) {
         combined = initial;
         int len = num.length;
         cardNum = new int[len];
@@ -22,6 +23,7 @@ public class PlainPoker {
         cardString = s;
 
     }
+
     public int[] determineHandType() {
         int len = combined.length;
         int[] counts = new int[len];
@@ -43,23 +45,20 @@ public class PlainPoker {
         }
         return counts;
     }
+
     public void handType(int[] counts) {
         int pairs = 0;
         for (int count : counts) {
             if (count > 1) {
-                if (count == 5){
+                if (count == 5) {
                     fiveOfKind++;
-                }
-                else if (count == 4) {
+                } else if (count == 4) {
                     fourOfKind++;
-                }
-                else if (count == 3){
+                } else if (count == 3) {
                     threeOfKind++;
-                }
-                else if (count == 2){
+                } else if (count == 2) {
                     pairs++;
-                }
-                else {
+                } else {
                     highCard++;
                 }
             }
@@ -67,8 +66,7 @@ public class PlainPoker {
 
         if (pairs == 2) {
             twoPair++;
-        }
-        else if (pairs == 1) {
+        } else if (pairs == 1) {
             onePair++;
         }
         if (pairs == 1 && threeOfKind == 1) {
@@ -78,15 +76,36 @@ public class PlainPoker {
         }
     }
 
-    public String toString(){
+    public String toString() {
         String line = "Number of five of a kind hands:" + fiveOfKind + "\n";
         line += "Number of full house hands:" + fullHouse + "\n";
-        line += "Number of four of a kind hands: " + fourOfKind+ "\n";
-        line += "Number of three of a kind hands: " + threeOfKind+ "\n";
-        line += "Number of two pair hands: " + twoPair+ "\n";
-        line += "Number of one pair hands: " + onePair+ "\n";
+        line += "Number of four of a kind hands: " + fourOfKind + "\n";
+        line += "Number of three of a kind hands: " + threeOfKind + "\n";
+        line += "Number of two pair hands: " + twoPair + "\n";
+        line += "Number of one pair hands: " + onePair + "\n";
         line += "Number of high card hands: " + highCard + "\n";
         return line;
     }
 
-}
+    private int getCardValue(String card) {
+        if (card.equalsIgnoreCase("ACE")) {
+            return 14;
+        }
+        if (card.equalsIgnoreCase("KING")) {
+            return 13;
+        }
+        if (card.equalsIgnoreCase("QUEEN")) {
+            return 12;
+        }
+        if (card.equalsIgnoreCase("JACK")) {
+            return 11;
+        }
+        try {
+            return Integer.parseInt(card);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    }
+
