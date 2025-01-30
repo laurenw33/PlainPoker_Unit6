@@ -11,11 +11,11 @@ public class PlainPoker {
     private static int twoPair = 0;
     private static int onePair = 0;
     private static int highCard = 0;
-    String type;
 
-    public PlainPoker(String[] num, String[] s, String[] initial) {
+    public PlainPoker(String[] num, String[] s, String[] initial, String winning) {
         combined = initial;
         cardString = s;
+        bidValue = Integer.parseInt(winning);
 
         cardNum = new int[num.length];
         for (int i = 0; i < num.length; i++) {
@@ -115,6 +115,72 @@ public class PlainPoker {
         }
         return total;
     }
+
+    public void orderCardsNum() {
+        int len = cardNum.length;
+
+        for (int i = 0; i < len - 1; i++) {
+            for (int j = 0; j < len - 1 - i; j++) {
+                if (cardNum[j] > cardNum[j + 1]) {
+
+                    int temp = cardNum[j];
+                    cardNum[j] = cardNum[j + 1];
+                    cardNum[j + 1] = temp;
+                }
+            }
+        }
+
+    }
+
+    public int[] orderCardsString(){
+        int len = cardString.length;
+        int[] temp = new int[cardString.length];
+
+        for (int i = 0; i < len; i++) {
+            String card = cardString[i];
+
+            if (card.equalsIgnoreCase("jack")) {
+                temp[i] = 11;
+            }
+            else if (card.equalsIgnoreCase("queen")) {
+                temp[i] = 12;
+            }
+            else if (card.equalsIgnoreCase("king")) {
+                temp[i] = 13;
+            }
+            else if (card.equalsIgnoreCase("ace")) {
+                temp[i] = 14;
+            }
+        }
+        for (int i = 0; i < len - 1; i++) {
+            for (int j = 0; j < len - 1 - i; j++) {
+                if (temp[j] > temp[j + 1]) {
+
+                    int tempValue = temp[j];
+                    temp[j] = temp[j + 1];
+                    temp[j + 1] = tempValue;
+                }
+            }
+        }
+
+        return temp;
+    }
+
+    public int[] combineCards(){
+        int[] stringCards = orderCardsString();
+        int[] combined = new int[stringCards.length + cardNum.length];
+
+        for (int i = 0; i < cardNum.length; i++) {
+            combined[i] = cardNum[i];
+        }
+        for (int i = 0; i < stringCards.length; i++) {
+            combined[cardNum.length + i] = stringCards[i];
+        }
+
+        return combined;
+    }
+
+
 
     public int[] getCardNum() {
         return cardNum;

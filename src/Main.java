@@ -27,6 +27,9 @@ public class Main {
             PlainPoker poker = null;
             for (int i = 0; i < fileArray.length; i++) {
                 String stringNumbers = fileArray[i];
+                int idx = stringNumbers.indexOf("\\|");
+                int len = stringNumbers.length();
+                String winning = stringNumbers.substring(idx, len);
                 String[] x = stringNumbers.split("\\|");
                 String[] y = x[0].split(",");
                 combined = y;
@@ -72,11 +75,14 @@ public class Main {
                 String[] num = numbers.split(" ");
                 String[] name = names.split(" ");
 
-                poker = new PlainPoker(num, name, combined);
+                poker = new PlainPoker(num, name, combined, winning);
                 poker.determineHandType();
                 poker.handType(poker.determineHandType());
                 System.out.println(poker.getCardValue());
-                System.out.println(Arrays.toString(poker.getCardNum()));
+                poker.orderCardsNum();
+//                System.out.println(Arrays.toString(poker.getCardNum()));
+//                System.out.println(Arrays.toString(poker.orderCardsString()));
+                System.out.println(Arrays.toString(poker.combineCards()));
             }
             System.out.println(poker.toString());
         }
