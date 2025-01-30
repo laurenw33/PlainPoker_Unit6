@@ -4,6 +4,13 @@ public class PlainPoker {
     private int[] cardNum;
     private String[] cardString;
     private String[] combined;
+    private static int fiveOfKind = 0;
+    private static int fourOfKind = 0;
+    private static int fullHouse = 0;
+    private static int threeOfKind = 0;
+    private static int twoPair = 0;
+    private static int onePair = 0;
+    private static int highCard = 0;
 
     public PlainPoker(String[] num, String[] s, String[] initial){
         combined = initial;
@@ -36,55 +43,60 @@ public class PlainPoker {
         }
         return counts;
     }
-    public String handType(int[] counts) {
-        int fiveOfKind = 0;
-        int fourOfKind = 0;
-        int fullHouse = 0;
-        int threeOfKind = 0;
-        int twoPair = 0;
-        int onePair = 0;
-        int highCard = 0;
+    public void handType(int[] counts) {
         int pairs = 0;
-
         for (int count : counts) {
-            if (count == 5) {
-                fiveOfKind++;
-            } else if (count == 4) {
-                fourOfKind++;
-            } else if (count == 3) {
-                threeOfKind++;
-            } else if (count == 2) {
-                pairs++;
+            if (count > 1) {
+                if (count == 5){
+                    fiveOfKind++;
+                }
+                else if (count == 4) {
+                    fourOfKind++;
+                }
+                else if (count == 3){
+                    threeOfKind++;
+                }
+                else if (count == 2){
+                    pairs++;
+                }
+                else {
+                    highCard++;
+                }
             }
         }
 
-        if (fiveOfKind == 1) {
-            fiveOfKind++;
-        }
-        if (fourOfKind == 1) {
-            fourOfKind++;
-        }
-        if (threeOfKind == 1 && pairs == 1) {
-            fullHouse++;
-        }
-        if (threeOfKind == 1) {
-            threeOfKind++;
-        }
         if (pairs == 2) {
             twoPair++;
         }
-        if (pairs == 1) {
+        else if (pairs == 1) {
             onePair++;
         }
-        highCard++;
+        if (pairs == 1 && threeOfKind == 1) {
+            pairs--;
+            threeOfKind--;
+            fullHouse++;
+        }
 
-        return "Number of five of a kind hands:" + fiveOfKind + "\n";
-        return "Number of full house hands:" + fullHouse + "\n";
-        return "Number of four of a kind hands: " + fourOfKind+ "\n";
-        return "Number of three of a kind hands: " + threeOfKind+ "\n";
-        return "Number of two pair hands: " + twoPair+ "\n";
-        return "Number of one pair hands: " + onePair+ "\n";
-        return "Number of high card hands: " + highCard + "\n";
 
+//        String line = "Number of five of a kind hands:" + fiveOfKind + "\n";
+//        line += "Number of full house hands:" + fullHouse + "\n";
+//        line += "Number of four of a kind hands: " + fourOfKind+ "\n";
+//        line += "Number of three of a kind hands: " + threeOfKind+ "\n";
+//        line += "Number of two pair hands: " + twoPair+ "\n";
+//        line += "Number of one pair hands: " + onePair+ "\n";
+//        line += "Number of high card hands: " + highCard + "\n";
+//        return line;
     }
+
+    public String toString(){
+        String line = "Number of five of a kind hands:" + fiveOfKind + "\n";
+        line += "Number of full house hands:" + fullHouse + "\n";
+        line += "Number of four of a kind hands: " + fourOfKind+ "\n";
+        line += "Number of three of a kind hands: " + threeOfKind+ "\n";
+        line += "Number of two pair hands: " + twoPair+ "\n";
+        line += "Number of one pair hands: " + onePair+ "\n";
+        line += "Number of high card hands: " + highCard + "\n";
+        return line;
+    }
+
 }

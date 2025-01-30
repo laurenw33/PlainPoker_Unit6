@@ -24,6 +24,7 @@ public class Main {
             String names;
             String numbers;
             String[] combined;
+            PlainPoker poker = null;
             for (int i = 0; i < fileArray.length; i++) {
                 String stringNumbers = fileArray[i];
                 String[] x = stringNumbers.split("\\|");
@@ -75,11 +76,14 @@ public class Main {
 //                System.out.println(Arrays.toString(num));
 //                System.out.println(Arrays.toString(name));
 
-                PlainPoker p = new PlainPoker(num, name, combined);
-                System.out.println(Arrays.toString(p.determineHandType()));
-                System.out.println(p.handType(p.determineHandType()));
+                poker = new PlainPoker(num, name, combined);
+                System.out.println(Arrays.toString(poker.determineHandType()));
+                poker.handType(poker.determineHandType());
+                System.out.println(poker.toString());
             }
-        } catch (FileNotFoundException fe) {
+
+        }
+        catch (FileNotFoundException fe) {
             System.out.println("File was not found");
             System.exit(1);
         }
