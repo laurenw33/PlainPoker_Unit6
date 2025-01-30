@@ -76,16 +76,6 @@ public class PlainPoker {
             threeOfKind--;
             fullHouse++;
         }
-
-
-//        String line = "Number of five of a kind hands:" + fiveOfKind + "\n";
-//        line += "Number of full house hands:" + fullHouse + "\n";
-//        line += "Number of four of a kind hands: " + fourOfKind+ "\n";
-//        line += "Number of three of a kind hands: " + threeOfKind+ "\n";
-//        line += "Number of two pair hands: " + twoPair+ "\n";
-//        line += "Number of one pair hands: " + onePair+ "\n";
-//        line += "Number of high card hands: " + highCard + "\n";
-//        return line;
     }
 
     public String toString(){

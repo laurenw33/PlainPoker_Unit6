@@ -73,9 +73,6 @@ public class Main {
                 String[] num = numbers.split(" ");
                 String[] name = names.split(" ");
 
-//                System.out.println(Arrays.toString(num));
-//                System.out.println(Arrays.toString(name));
-
                 poker = new PlainPoker(num, name, combined);
                 System.out.println(Arrays.toString(poker.determineHandType()));
                 poker.handType(poker.determineHandType());
