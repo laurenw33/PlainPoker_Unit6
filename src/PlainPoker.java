@@ -1,9 +1,9 @@
 public class PlainPoker {
 
-    private int bidValue;
+    public int bidValue;
     private int[] cardNum;
     private String[] cardString;
-    private String[] combined;
+    public String[] combined;
     private static int fiveOfKind = 0;
     private static int fourOfKind = 0;
     private static int fullHouse = 0;
@@ -11,6 +11,8 @@ public class PlainPoker {
     private static int twoPair = 0;
     private static int onePair = 0;
     private static int highCard = 0;
+    private int rank;
+    private static int totalBidValue = 0;
 
     public PlainPoker(String[] num, String[] s, String[] initial, String winning) {
         combined = initial;
@@ -78,17 +80,6 @@ public class PlainPoker {
             threeOfKind--;
             fullHouse++;
         }
-    }
-
-    public String toString() {
-        String line = "Number of five of a kind hands:" + fiveOfKind + "\n";
-        line += "Number of full house hands:" + fullHouse + "\n";
-        line += "Number of four of a kind hands: " + fourOfKind + "\n";
-        line += "Number of three of a kind hands: " + threeOfKind + "\n";
-        line += "Number of two pair hands: " + twoPair + "\n";
-        line += "Number of one pair hands: " + onePair + "\n";
-        line += "Number of high card hands: " + highCard + "\n";
-        return line;
     }
 
     public int getCardValue() {
@@ -166,25 +157,117 @@ public class PlainPoker {
         return temp;
     }
 
-    public int[] combineCards(){
-        int[] stringCards = orderCardsString();
-        int[] combined = new int[stringCards.length + cardNum.length];
+//    public int[] combineCards(){
+//        int[] stringCards = orderCardsString();
+//        int[] combined = new int[stringCards.length + cardNum.length];
+//
+//        for (int i = 0; i < cardNum.length; i++) {
+//            combined[i] = cardNum[i];
+//        }
+//        for (int i = 0; i < stringCards.length; i++) {
+//            combined[cardNum.length + i] = stringCards[i];
+//        }
+//
+//        return combined;
+//    }
 
-        for (int i = 0; i < cardNum.length; i++) {
-            combined[i] = cardNum[i];
+
+
+    public int[] combineCards() {
+        int[] combined = new int[5]; // Always 5 cards in a poker hand
+        int numIndex = 0;
+        int strIndex = 0;
+
+        // Convert the original combined array to numeric values
+        for (int i = 0; i < this.combined.length; i++) {
+            String card = this.combined[i];
+            if (card.equalsIgnoreCase("ace")) {
+                combined[i] = 14;
+            } else if (card.equalsIgnoreCase("king")) {
+                combined[i] = 13;
+            } else if (card.equalsIgnoreCase("queen")) {
+                combined[i] = 12;
+            } else if (card.equalsIgnoreCase("jack")) {
+                combined[i] = 11;
+            } else {
+                try {
+                    combined[i] = Integer.parseInt(card);
+                } catch (NumberFormatException e) {
+                }
+            }
         }
-        for (int i = 0; i < stringCards.length; i++) {
-            combined[cardNum.length + i] = stringCards[i];
+
+        for (int i = 0; i < combined.length - 1; i++) {
+            for (int j = 0; j < combined.length - 1 - i; j++) {
+                if (combined[j] > combined[j + 1]) {
+                    int temp = combined[j];
+                    combined[j] = combined[j + 1];
+                    combined[j + 1] = temp;
+                }
+            }
         }
 
         return combined;
     }
 
-
-
     public int[] getCardNum() {
         return cardNum;
     }
-}
+
+    public int getHandStrength() {
+        int[] counts = determineHandType();
+        int pairs = 0;
+        int threes = 0;
+
+        for (int count : counts) {
+            if (count == 5) return 7;
+            if (count == 4) return 6;
+            if (count == 3) threes++;
+            if (count == 2) pairs++;
+        }
+
+        if (threes == 1 && pairs == 1) return 5;
+        if (threes == 1) return 4;
+        if (pairs == 2) return 3;
+        if (pairs == 1) return 2;
+        return 1;
+    }
+
+    public void setRank (int newRank) {
+        rank = newRank;
+        totalBidValue += rank * bidValue;
+    }
+
+    public int compareTo(PlainPoker other) {
+        int thisStrength = this.getHandStrength();
+        int otherStrength = other.getHandStrength();
+
+        if (thisStrength != otherStrength) {
+            return Integer.compare(thisStrength, otherStrength);
+        }
+
+        int[] thisCombined = this.combineCards();
+        int[] otherCombined = other.combineCards();
+
+        for (int i = 0; i < thisCombined.length; i++) {
+            if (thisCombined[i] != otherCombined[i]) {
+                return Integer.compare(thisCombined[i], otherCombined[i]);
+            }
+        }
+        return 0;
+    }
+
+    public String toString() {
+        String line = "Number of five of a kind hands:" + fiveOfKind + "\n";
+        line += "Number of full house hands:" + fullHouse + "\n";
+        line += "Number of four of a kind hands: " + fourOfKind + "\n";
+        line += "Number of three of a kind hands: " + threeOfKind + "\n";
+        line += "Number of two pair hands: " + twoPair + "\n";
+        line += "Number of one pair hands: " + onePair + "\n";
+        line += "Number of high card hands: " + highCard + "\n";
+        line += "Total Bid Value: " + totalBidValue;
+        return line;
+    }
+    }
 
 
