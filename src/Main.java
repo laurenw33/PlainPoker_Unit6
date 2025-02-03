@@ -91,6 +91,7 @@ public class Main {
                 poker.determineHandType();
                 poker.handType(poker.determineHandType());
                 poker.orderCardsNum();
+                System.out.println(Arrays.toString(poker.getRank()));
 
             }
 

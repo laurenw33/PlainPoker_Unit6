@@ -11,7 +11,7 @@ public class PlainPoker {
     private static int twoPair = 0;
     private static int onePair = 0;
     private static int highCard = 0;
-    private int rank;
+    private int[] rank;
     private static int totalBidValue = 0;
     private static int totalBidValueWithJacksWild = 0;
 
@@ -59,8 +59,10 @@ public class PlainPoker {
         for (int count : counts) {
             if (count == 5) {
                 fiveOfKind++;
+                setRank(7);
             } else if (count == 4) {
                 fourOfKind++;
+                setRank(5);
             } else if (count == 3) {
                 hasThree = true;
             } else if (count == 2) {
@@ -73,31 +75,47 @@ public class PlainPoker {
             setRank(6);
         } else if (hasThree) {
             threeOfKind++;
-            setRank(3);
+            setRank(4);
         } else if (pairs == 2) {
             twoPair++;
-            setRank(2);
+            setRank(3);
         } else if (pairs == 1) {
             onePair++;
-            setRank(1);
+            setRank(2);
         } else {
             highCard++;
-            setRank(0);
+            setRank(1);
         }
-        updateTotalBidValue(calculateTotalBidValue());
-        updateTotalBidValueWithJacksWild(calculateTotalBidValueWithJacksWild());
+//        updateTotalBidValue(calculateTotalBidValue());
+//        updateTotalBidValueWithJacksWild(calculateTotalBidValueWithJacksWild());
     }
-    public int calculateTotalBidValue() {
-        return this.rank * bidValue[0];
-    }
+//    public int calculateTotalBidValue() {
+//        return this.rank * bidValue[0];
+//    }
 
     public static int addWildBonus(int wildCards) {
         return wildCards * 100;
     }
 
     public void setRank(int newRank) {
-        rank = newRank;
-        totalBidValue = rank * bidValue[0];
+        rank = new int[combined.length];
+        boolean play = true;
+
+        while (play) {
+            play = false;
+            for (int i = 0; i < combined.length; i++) {
+                if (rank[i] == 0) {
+                    rank[i] = newRank;
+                }
+                else {
+                    play = true;
+                }
+            }
+        }
+    }
+
+    public int[] getRank() {
+        return rank;
     }
 
     public int calculateTotalBidValueWithJacksWild() {
@@ -193,8 +211,8 @@ public class PlainPoker {
 //    }
 
     public String toString() {
-        String line = "Number of five of a kind hands:" + fiveOfKind + "\n";
-        line += "Number of full house hands:" + fullHouse + "\n";
+        String line = "Number of five of a kind hands: " + fiveOfKind + "\n";
+        line += "Number of full house hands: " + fullHouse + "\n";
         line += "Number of four of a kind hands: " + fourOfKind + "\n";
         line += "Number of three of a kind hands: " + threeOfKind + "\n";
         line += "Number of two pair hands: " + twoPair + "\n";
