@@ -19,6 +19,7 @@ public class PlainPoker {
         combined = initial;
         cardString = s;
         this.bidValue = new int[]{bidValue};
+        rank = new int[combined.length];
 
         cardNum = new int[num.length];
         for (int i = 0; i < num.length; i++) {
@@ -28,7 +29,6 @@ public class PlainPoker {
                 cardNum[i] = 0;
             }
         }
-        setRank(bidValue);
     }
 
     public int[] determineHandType() {
@@ -86,31 +86,17 @@ public class PlainPoker {
             highCard++;
             setRank(1);
         }
-//        updateTotalBidValue(calculateTotalBidValue());
-//        updateTotalBidValueWithJacksWild(calculateTotalBidValueWithJacksWild());
     }
-//    public int calculateTotalBidValue() {
-//        return this.rank * bidValue[0];
-//    }
 
     public static int addWildBonus(int wildCards) {
         return wildCards * 100;
     }
 
     public void setRank(int newRank) {
-        rank = new int[combined.length];
-        boolean play = true;
-
-        while (play) {
-            play = false;
-            for (int i = 0; i < combined.length; i++) {
+        for (int i = 0; i < combined.length; i++) {
                 if (rank[i] == 0) {
                     rank[i] = newRank;
                 }
-                else {
-                    play = true;
-                }
-            }
         }
     }
 
@@ -186,29 +172,6 @@ public class PlainPoker {
 
         return temp;
     }
-
-//    public int[] combineCards() {
-//        int[] stringCards = orderCardsString();
-//        int[] combinedArray = new int[cardNum.length + stringCards.length];
-//
-//        for (int i = 0; i < cardNum.length; i++) {
-//            combinedArray[i] = cardNum[i];
-//        }
-//        for (int i = 0; i < stringCards.length; i++) {
-//            combinedArray[cardNum.length + i] = stringCards[i];
-//        }
-//
-//        for (int i = 0; i < combinedArray.length - 1; i++) {
-//            for (int j = 0; j < combinedArray.length - 1 - i; j++) {
-//                if (combinedArray[j] > combinedArray[j + 1]) {
-//                    int temp = combinedArray[j];
-//                    combinedArray[j] = combinedArray[j + 1];
-//                    combinedArray[j + 1] = temp;
-//                }
-//            }
-//        }
-//        return combinedArray;
-//    }
 
     public String toString() {
         String line = "Number of five of a kind hands: " + fiveOfKind + "\n";
