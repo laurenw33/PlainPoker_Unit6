@@ -1,188 +1,184 @@
+import java.util.ArrayList;
+
 public class PlainPoker {
+    /*Arraylist for each type of hand
+    we will put in the hands in their respective type
+     */
+    ArrayList<Hand> highCards = new ArrayList<Hand>();
+    ArrayList<Hand> onePairs = new ArrayList<Hand>();
+    ArrayList<Hand> twoPairs = new ArrayList<Hand>();
+    ArrayList<Hand> threeOfAKinds = new ArrayList<Hand>();
+    ArrayList<Hand> fullHouses = new ArrayList<Hand>();
+    ArrayList<Hand> fourOfAKinds = new ArrayList<Hand>();
+    ArrayList<Hand> fiveOfAKinds = new ArrayList<Hand>();
+    ArrayList<Hand> hands;
 
-    public int[] bidValue;
-    private int[] cardNum;
-    private String[] cardString;
-    public String[] combined;
-    private static int fiveOfKind = 0;
-    private static int fourOfKind = 0;
-    private static int fullHouse = 0;
-    private static int threeOfKind = 0;
-    private static int twoPair = 0;
-    private static int onePair = 0;
-    private static int highCard = 0;
-    private int[] rank;
-    private static int totalBidValue = 0;
-    private static int totalBidValueWithJacksWild = 0;
-
-    public PlainPoker(String[] num, String[] s, String[] initial, int bidValue) {
-        combined = initial;
-        cardString = s;
-        this.bidValue = new int[]{bidValue};
-        rank = new int[combined.length];
-
-        cardNum = new int[num.length];
-        for (int i = 0; i < num.length; i++) {
-            try {
-                cardNum[i] = Integer.parseInt(num[i]);
-            } catch (Exception e) {
-                cardNum[i] = 0;
-            }
-        }
+    public PlainPoker(ArrayList<Hand> hands) {
+        this.hands = hands;
+        sortHands();
     }
 
-    public int[] determineHandType() {
-        int[] counts = new int[combined.length];
-
-        for (int i = 0; i < combined.length; i++) {
-            String currentCard = combined[i];
-            int count = 1;
-
-            for (int j = i + 1; j < combined.length; j++) {
-                if (combined[j].equals(currentCard)) {
-                    count++;
-                    counts[j] = -1;
+    //Does all the logic for sorting the hands
+    private void sortHands() {
+        for (Hand hand: hands) {
+            if (hand.getHandType().equals("high card")) {
+                if (highCards.isEmpty()) {
+                    highCards.add(hand);
+                }
+                else {
+                    placeHand(highCards, hand);
+                }
+            }
+            else if (hand.getHandType().equals("one pair")) {
+                if (onePairs.isEmpty()) {
+                    onePairs.add(hand);
+                }
+                else {
+                    placeHand(onePairs, hand);
+                }
+            }
+            else if (hand.getHandType().equals("two pair")) {
+                if (twoPairs.isEmpty()) {
+                    twoPairs.add(hand);
+                }
+                else {
+                    placeHand(twoPairs, hand);
+                }
+            }
+            else if (hand.getHandType().equals("three of a kind")) {
+                if (threeOfAKinds.isEmpty()) {
+                    threeOfAKinds.add(hand);
+                }
+                else {
+                    placeHand(threeOfAKinds, hand);
+                }
+            }
+            else if (hand.getHandType().equals("full house")) {
+                if (fullHouses.isEmpty()) {
+                    fullHouses.add(hand);
+                }
+                else {
+                    placeHand(fullHouses, hand);
+                }
+            }
+            else if (hand.getHandType().equals("four of a kind")) {
+                if (fourOfAKinds.isEmpty()) {
+                    fourOfAKinds.add(hand);
+                }
+                else {
+                    placeHand(fourOfAKinds, hand);
+                }
+            }
+            else if (hand.getHandType().equals("five of a kind")) {
+                if (fiveOfAKinds.isEmpty()) {
+                    fiveOfAKinds.add(hand);
+                }
+                else {
+                    placeHand(fiveOfAKinds, hand);
                 }
             }
 
-            if (counts[i] != -1) {
-                counts[i] = count;
+        }
+    }
+
+    //Place hand will find out where to put the hand in the typeArray
+    private void placeHand(ArrayList<Hand> handTypeArray, Hand hand) {
+        boolean handPlaced = false;
+        for (int i = 0; i < handTypeArray.size(); i ++) {
+            if (!compareHands(hand, handTypeArray.get(i))) {
+                handTypeArray.add(i, hand);
+                handPlaced = true;
+                break;
             }
         }
-        return counts;
+        if (!handPlaced) {
+            handTypeArray.add(hand);
+        }
     }
 
-    public void handType(int[] counts) {
-        int pairs = 0;
-        boolean hasThree = false;
-
-        for (int count : counts) {
-            if (count == 5) {
-                fiveOfKind++;
-                setRank(7);
-            } else if (count == 4) {
-                fourOfKind++;
-                setRank(5);
-            } else if (count == 3) {
-                hasThree = true;
-            } else if (count == 2) {
-                pairs++;
+    //is called by placeHand(), will compare the card types of the two hands
+    private boolean compareHands(Hand hand1, Hand hand2) {
+        int[] hand1Cards = convertNumeric(hand1.getCards());
+        int[] hand2Cards = convertNumeric(hand2.getCards());
+        for (int i = 0; i < hand1Cards.length; i++) {
+            if (hand1Cards[i] > hand2Cards[i]) {
+                return true;
+            }
+            else if (hand1Cards[i] < hand2Cards[i]) {
+                return false;
             }
         }
-
-        if (hasThree && pairs == 1) {
-            fullHouse++;
-            setRank(6);
-        } else if (hasThree) {
-            threeOfKind++;
-            setRank(4);
-        } else if (pairs == 2) {
-            twoPair++;
-            setRank(3);
-        } else if (pairs == 1) {
-            onePair++;
-            setRank(2);
-        } else {
-            highCard++;
-            setRank(1);
-        }
+        return false;
     }
 
-    public static int addWildBonus(int wildCards) {
-        return wildCards * 100;
-    }
-
-    public void setRank(int newRank) {
-        for (int i = 0; i < combined.length; i++) {
-                if (rank[i] == 0) {
-                    rank[i] = newRank;
-                }
-        }
-    }
-
-    public int[] getRank() {
-        return rank;
-    }
-
-    public int calculateTotalBidValueWithJacksWild() {
-        int wildCardValue = 0;
-
-        for (int i = 0; i < combined.length; i++) {
-            if (combined[i].equalsIgnoreCase("jack")) {
-                wildCardValue++;
+    //is called by compareHands(), will convert all string cards (Ace, King, Queen, Jack) into numeric values for easy comparison
+    private static int[] convertNumeric(String[] cards) {
+        int[] modifiedCards = new int[5];
+        for (int i = 0; i < cards.length; i ++) {
+            int value = 0;
+            if (cards[i].equals("Ace")) {
+                value= 14;
             }
-        }
-
-        return totalBidValue + (addWildBonus(wildCardValue));
-    }
-
-    public void updateTotalBidValue(int value) {
-        totalBidValue += value;
-    }
-
-    public static void updateTotalBidValueWithJacksWild(int value) {
-        totalBidValueWithJacksWild += value;
-    }
-
-    public int[] orderCardsNum() {
-        for (int i = 0; i < cardNum.length - 1; i++) {
-            for (int j = 0; j < cardNum.length - 1 - i; j++) {
-                if (cardNum[j] > cardNum[j + 1]) {
-                    int temp = cardNum[j];
-                    cardNum[j] = cardNum[j + 1];
-                    cardNum[j + 1] = temp;
-                }
+            else if (cards[i].equals("King")) {
+                value = 13;
             }
+            else if (cards[i].equals("Queen")) {
+                value = 12;
+            }
+            else if (cards[i].equals("Jack")) {
+                value = 11;
+            }
+            else {
+                value = Integer.parseInt(cards[i]);
+            }
+            modifiedCards[i] = value;
         }
-        return cardNum;
+        return modifiedCards;
     }
 
-    public int[] orderCardsString() {
-        int[] temp = new int[cardString.length];
-
-        for (int i = 0; i < cardString.length; i++) {
-            String card = cardString[i].toLowerCase();
-
-            if (card.equals("jack")) {
-                temp[i] = 11;
-            } else if (card.equals("queen")) {
-                temp[i] = 12;
-            } else if (card.equals("king")) {
-                temp[i] = 13;
-            } else if (card.equals("ace")) {
-                temp[i] = 14;
-            } else {
-                try {
-                    temp[i] = Integer.parseInt(cardString[i]);
-                } catch (NumberFormatException e) {
-                    temp[i] = 0;
-                }
-            }
+    //public function, iterates through each of the hands in the hand type arrays, starts at the lowest, incrementing the rank by one every time
+    public int calculateBiddingAmount() {
+        int rank = 1;
+        int total = 0;
+        for (Hand highCard: highCards) {
+            total += highCard.getBidAmount() * rank;
+            rank ++;
         }
-
-        for (int i = 0; i < temp.length - 1; i++) {
-            for (int j = 0; j < temp.length - 1 - i; j++) {
-                if (temp[j] > temp[j + 1]) {
-                    int tempValue = temp[j];
-                    temp[j] = temp[j + 1];
-                    temp[j + 1] = tempValue;
-                }
-            }
+        for (Hand onePair: onePairs) {
+            total += onePair.getBidAmount() * rank;
+            rank ++;
         }
-
-        return temp;
+        for (Hand twoPair: twoPairs) {
+            total += twoPair.getBidAmount() * rank;
+            rank ++;
+        }
+        for (Hand threeOfAKind: threeOfAKinds) {
+            total += threeOfAKind.getBidAmount() * rank;
+            rank ++;
+        }
+        for (Hand fullHouse: fullHouses) {
+            total += fullHouse.getBidAmount() * rank;
+            rank ++;
+        }
+        for (Hand fourOfAKind: fourOfAKinds) {
+            total += fourOfAKind.getBidAmount() * rank;
+            rank ++;
+        }
+        for (Hand fiveOfAKind: fiveOfAKinds) {
+            total += fiveOfAKind.getBidAmount() * rank;
+            rank ++;
+        }
+        return total;
     }
 
-    public String toString() {
-        String line = "Number of five of a kind hands: " + fiveOfKind + "\n";
-        line += "Number of full house hands: " + fullHouse + "\n";
-        line += "Number of four of a kind hands: " + fourOfKind + "\n";
-        line += "Number of three of a kind hands: " + threeOfKind + "\n";
-        line += "Number of two pair hands: " + twoPair + "\n";
-        line += "Number of one pair hands: " + onePair + "\n";
-        line += "Number of high card hands: " + highCard + "\n";
-        line += "Total Bid Value: " + totalBidValue + "\n";
-        line += "Total Bid Value With Jacks Wild: " + calculateTotalBidValueWithJacksWild();
-        return line;
+    //js prints how many of each kind
+    public void printHandTypes() {
+        System.out.println("Number of five of a kind hands: " + fiveOfAKinds.size());
+        System.out.println("Number of four of a kind hands: " + fourOfAKinds.size());
+        System.out.println("Number of full house hands: " + fullHouses.size());
+        System.out.println("Number of three of a kind hands: " + threeOfAKinds.size());
+        System.out.println("Number of two pair hands: " + twoPairs.size());
+        System.out.println("Number of one pair hands: " + onePairs.size());
+        System.out.println("Number of high card hands: " + highCards.size());
     }
 }
