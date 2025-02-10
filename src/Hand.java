@@ -1,27 +1,25 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Hand {
-    //Attributes are self-explanatory
-    //Cards: list of the 5 cards
-    //Hand type: what type hand is
-    //Bid Amount: The bid amount
     private String handType;
-    private int jackHandType;
     private String[] cards;
     private int bidAmount;
+    private String jackHandType;
+    private boolean hasJack;
 
     public Hand(String[] cards, int bidAmount) {
         this.cards = cards;
         this.bidAmount = bidAmount;
-        handType = findHandType();
+        handType = findHandType(this.cards);
         jackHandType = findJackHandType();
     }
 
-    //This is just all of part one in a function
-    private String findHandType() {
+    private String findHandType(String[] cards) {
         boolean onePair = false;
         boolean twoPair = false;
         boolean threeOfAKind = false;
         int matching = 1;
-        String [] cards = this.cards;
         for (int x = 0; x < cards.length; x ++) {
             for (int y = x; y < cards.length; y ++) {
                 if (x != y) {
@@ -66,69 +64,91 @@ public class Hand {
         }
     }
 
-    private int findJackHandType(){
-        boolean onePair = false;
-        boolean twoPair = false;
-        boolean threeOfAKind = false;
-        int matching = 1;
-        int type;
-        String [] cards = this.cards;
-        for (int x = 0; x < cards.length; x ++) {
-            for (int y = x; y < cards.length; y ++) {
-                if (x != y) {
-                    if (cards[x].equals(cards[y])) {
-                        matching++;
-                    }
+    private String findJackHandType() {
+        ArrayList<String> jackTypes = new ArrayList<String>();
+        jackTypes.add(cards[0]);
+        for (String card: cards) {
+            boolean add = true;
+            for (String jackTypesCard: jackTypes) {
+                if (card.equals(jackTypesCard)) {
+                    add = false;
                 }
             }
-            if (matching == 5) {
-                type = 7;
+            if (add) {
+                jackTypes.add(card);
             }
-            if (matching == 4) {
-                type = 5;
-            }
-            if (matching == 3) {
-                threeOfAKind = true;
-            }
-            if (matching == 2) {
-                if (onePair) {
-                    twoPair = true;
-                }
-                else {
-                    onePair = true;
+        }
+
+        int max = 0;
+        for (String jackType: jackTypes) {
+            String[] cards = this.cards.clone();
+            for (int i = 0; i < cards.length; i ++) {
+                if (cards[i].equals("Jack")) {
+                    cards[i] = jackType;
                 }
             }
-            matching = 1;
+            int currJackHandType = makeHandTypeNumeric(findHandType(cards));
+            if (currJackHandType > max) {
+                max = currJackHandType;
+            }
         }
-        if (twoPair && threeOfAKind) {
-            type = 6;
+
+        return makehandTypeString(max);
+    }
+
+    private int makeHandTypeNumeric(String handType) {
+        if (handType.equals("high card")) {
+            return 1;
         }
-        else if (threeOfAKind) {
-            type = 4;
+        else if (handType.equals("one pair")) {
+            return 2;
         }
-        else if (twoPair) {
-            type = 3;
+        else if (handType.equals("two pair")) {
+            return 3;
         }
-        else if (onePair) {
-            type = 2;
+        else if (handType.equals("three of a kind")) {
+            return 4;
+        }
+        else if (handType.equals("full house")) {
+            return 5;
+        }
+        else if (handType.equals("four of a kind")) {
+            return 6;
         }
         else {
-            type = 1;
+            return 7;
         }
-        int jackCount = 0;
-        for (String c : cards) {
-            if (c.equals("Jack")){
-                jackCount++;
-            }
+    }
+
+    private String makehandTypeString(int handType) {
+        if (handType == 1) {
+            return "high card";
         }
-        return type + jackCount;
+        else if (handType == 2) {
+            return "one pair";
+        }
+        else if (handType == 3) {
+            return "two pair";
+        }
+        else if (handType == 4) {
+            return "three of a kind";
+        }
+        else if (handType == 5) {
+            return "full house";
+        }
+        else if (handType == 6) {
+            return "four of a kind";
+        }
+        else {
+            return "five of a kind";
+        }
     }
 
     public String getHandType() {
         return handType;
     }
 
-    public int getJackHandType() {
+    public String getJackHandType() {
         return jackHandType;
     }
 

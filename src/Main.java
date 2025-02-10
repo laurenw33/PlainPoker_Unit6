@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -17,13 +18,11 @@ public class Main {
             String[] fileArray = fileData.split("\n");
 
 
-            //Make all the hand objects and put them in a list
             for (int i = 0; i < fileArray.length; i ++) {
                 String[] cards = fileArray[i].substring(0, fileArray[i].indexOf("|")).split(",");
                 int bidAmount = Integer.parseInt(fileArray[i].substring(fileArray[i].indexOf("|") + 1));
                 Hand hand = new Hand(cards, bidAmount);
                 hands.add(hand);
-                System.out.println(hand.getJackHandType());
             }
 
 
@@ -32,11 +31,9 @@ public class Main {
             System.exit(1);
         }
 
-        //Plain Poker is my class that handles all the logic
         PlainPoker plainPoker = new PlainPoker(hands);
         plainPoker.printHandTypes();
-        System.out.println("Total Bid Value: " + plainPoker.calculateBiddingAmount());
-        System.out.println("Total Bid Value With Jacks Wild: " + plainPoker.calculateJackBiddingAmount());
-        System.out.println();
+        System.out.println("Total Bid Value: " + plainPoker.getNormBiddingAmt());
+        System.out.println("Total Bid Value With Jacks Wild: " + plainPoker.getWildJacksBiddingAmt());
     }
 }
