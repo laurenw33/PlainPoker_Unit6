@@ -32,7 +32,7 @@ public class Main {
         }
 
         PlainPoker plainPoker = new PlainPoker(hands);
-        plainPoker.printHandTypes();
+        System.out.println(plainPoker.printHandTypes());
         System.out.println("Total Bid Value: " + plainPoker.getNormBiddingAmt());
         System.out.println("Total Bid Value With Jacks Wild: " + plainPoker.getWildJacksBiddingAmt());
     }

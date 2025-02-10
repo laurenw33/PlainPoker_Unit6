@@ -190,14 +190,15 @@ public class PlainPoker {
         fiveOfAKinds.clear();
     }
 
-    public void printHandTypes() {
-        System.out.println("Number of five of a kind hands: " + fiveOfAKinds.size());
-        System.out.println("Number of full house hands: " + fullHouses.size());
-        System.out.println("Number of four of a kind hands: " + fourOfAKinds.size());
-        System.out.println("Number of three of a kind hands: " + threeOfAKinds.size());
-        System.out.println("Number of two pair hands: " + twoPairs.size());
-        System.out.println("Number of one pair hands: " + onePairs.size());
-        System.out.println("Number of high card hands: " + highCards.size());
+    public String printHandTypes() {
+        String s = "Number of five of a kind hands: " + fiveOfAKinds.size() + "\n";
+        s += "Number of full house hands: " + fullHouses.size() + "\n";
+        s += "Number of four of a kind hands: " + fourOfAKinds.size() + "\n";
+        s += "Number of three of a kind hands: " + threeOfAKinds.size() + "\n";
+        s += "Number of two pair hands: " + twoPairs.size() + "\n";
+        s += "Number of one pair hands: " + onePairs.size() + "\n";
+        s += "Number of high card hands: " + highCards.size();
+        return s;
     }
 
     public int getNormBiddingAmt() {
