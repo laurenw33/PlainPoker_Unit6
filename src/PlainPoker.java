@@ -1,3 +1,4 @@
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class PlainPoker {
@@ -11,11 +12,21 @@ public class PlainPoker {
     ArrayList<Hand> fullHouses = new ArrayList<Hand>();
     ArrayList<Hand> fourOfAKinds = new ArrayList<Hand>();
     ArrayList<Hand> fiveOfAKinds = new ArrayList<Hand>();
+
+    ArrayList<Hand> jackHigh = new ArrayList<Hand>();
+    ArrayList<Hand> jackOnePair = new ArrayList<Hand>();
+    ArrayList<Hand> jackTwoPair = new ArrayList<Hand>();
+    ArrayList<Hand> jackThree = new ArrayList<Hand>();
+    ArrayList<Hand> jackFull = new ArrayList<Hand>();
+    ArrayList<Hand> jackFour = new ArrayList<Hand>();
+    ArrayList<Hand> jackFive = new ArrayList<Hand>();
+
     ArrayList<Hand> hands;
 
     public PlainPoker(ArrayList<Hand> hands) {
         this.hands = hands;
         sortHands();
+        sortJackHands();
     }
 
     //Does all the logic for sorting the hands
@@ -80,6 +91,70 @@ public class PlainPoker {
 
         }
     }
+
+    private void sortJackHands() {
+        for (Hand hand: hands) {
+            if (hand.getJackHandType() == 1) {
+                if (jackHigh.isEmpty()) {
+                    jackHigh.add(hand);
+                    String[] cards = hand.getCards();
+                }
+                else {
+                    placeHand(jackHigh, hand);
+                }
+            }
+            else if (hand.getJackHandType() == 2) {
+                if (jackOnePair.isEmpty()) {
+                    jackOnePair.add(hand);
+                }
+                else {
+                    placeHand(jackOnePair, hand);
+                }
+            }
+            else if (hand.getJackHandType() == 3) {
+                if (jackTwoPair.isEmpty()) {
+                    jackTwoPair.add(hand);
+                }
+                else {
+                    placeHand(jackTwoPair, hand);
+                }
+            }
+            else if (hand.getJackHandType() == 4) {
+                if (jackThree.isEmpty()) {
+                    jackThree.add(hand);
+                }
+                else {
+                    placeHand(jackThree, hand);
+                }
+            }
+            else if (hand.getJackHandType() == 5) {
+                if (jackFull.isEmpty()) {
+                    jackFull.add(hand);
+                }
+                else {
+                    placeHand(jackFull, hand);
+                }
+            }
+            else if (hand.getJackHandType() == 6) {
+                if (jackFour.isEmpty()) {
+                    jackFour.add(hand);
+                }
+                else {
+                    placeHand(jackFour, hand);
+                }
+            }
+            else if (hand.getJackHandType() == 7) {
+                if (jackFive.isEmpty()) {
+                    jackFive.add(hand);
+                }
+                else {
+                    placeHand(jackFive, hand);
+                }
+            }
+
+        }
+    }
+
 
     //Place hand will find out where to put the hand in the typeArray
     private void placeHand(ArrayList<Hand> handTypeArray, Hand hand) {
@@ -165,6 +240,40 @@ public class PlainPoker {
             rank ++;
         }
         for (Hand fiveOfAKind: fiveOfAKinds) {
+            total += fiveOfAKind.getBidAmount() * rank;
+            rank ++;
+        }
+        return total;
+    }
+
+    public int calculateJackBiddingAmount() {
+        int rank = 1;
+        int total = 0;
+        for (Hand highCard: jackHigh) {
+            total += highCard.getBidAmount() * rank;
+            rank ++;
+        }
+        for (Hand onePair: jackOnePair) {
+            total += onePair.getBidAmount() * rank;
+            rank ++;
+        }
+        for (Hand twoPair: jackTwoPair) {
+            total += twoPair.getBidAmount() * rank;
+            rank ++;
+        }
+        for (Hand threeOfAKind: jackThree) {
+            total += threeOfAKind.getBidAmount() * rank;
+            rank ++;
+        }
+        for (Hand fullHouse: jackFull) {
+            total += fullHouse.getBidAmount() * rank;
+            rank ++;
+        }
+        for (Hand fourOfAKind: jackFour) {
+            total += fourOfAKind.getBidAmount() * rank;
+            rank ++;
+        }
+        for (Hand fiveOfAKind: jackFive) {
             total += fiveOfAKind.getBidAmount() * rank;
             rank ++;
         }

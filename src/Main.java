@@ -23,6 +23,7 @@ public class Main {
                 int bidAmount = Integer.parseInt(fileArray[i].substring(fileArray[i].indexOf("|") + 1));
                 Hand hand = new Hand(cards, bidAmount);
                 hands.add(hand);
+                System.out.println(hand.getJackHandType());
             }
 
 
@@ -34,6 +35,8 @@ public class Main {
         //Plain Poker is my class that handles all the logic
         PlainPoker plainPoker = new PlainPoker(hands);
         plainPoker.printHandTypes();
-        System.out.println("Bidding Amount: " + plainPoker.calculateBiddingAmount());
+        System.out.println("Total Bid Value: " + plainPoker.calculateBiddingAmount());
+        System.out.println("Total Bid Value With Jacks Wild: " + plainPoker.calculateJackBiddingAmount());
+        System.out.println();
     }
 }
